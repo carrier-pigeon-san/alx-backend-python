@@ -4,10 +4,11 @@
 
 import asyncio
 import random
+from typing import List
 wait_random = __import__('0-basic_async_syntax').wait_random
 
 
-async def wait_n(n: int, max_delay: int) -> list:
+async def wait_n(n: int, max_delay: int) -> List[float]:
     """This function waits for a random number of seconds and returns it."""
-    delays = [wait_random(max_delay) for i in range(n)]
+    delays = [wait_random(max_delay) for _ in range(n)]
     return [await delay for delay in asyncio.as_completed(delays)]
