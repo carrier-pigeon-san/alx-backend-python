@@ -19,7 +19,7 @@ class TestGithubOrgClient(TestCase):
     ])
     @patch('client.get_json')
     def test_org(self, org_name: str, response: Mapping,
-                 mock_get_json: MagicMock) -> None:
+                 mock_get_json) -> None:
         """Tests GithubOrgClient.org method returns correct value
         """
         mock_get_json.return_value = response
