@@ -4,7 +4,7 @@
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 from parameterized import parameterized
-from typing import Mapping
+from typing import Mapping, Dict
 from client import GithubOrgClient
 
 
@@ -35,3 +35,24 @@ class TestGithubOrgClient(TestCase):
         """
         gh = GithubOrgClient(org_name)
         self.assertEqual(gh._public_repos_url, repos_url["repos_url"])
+
+    @parameterized.expand([
+        ('google', 'my_license', ['repo']),
+    ])
+    @patch('client.get_json')
+    @patch.object(GithubOrgClient, '_public_repos_url')
+    def test_public_repos(self, org_name: str,
+                          license: str,
+                          expected: Mapping,
+                          mock_public_repos_url,
+                          mock_get_json) -> None:
+        """Tests GithubOrgClient.public_repos method returns correct value
+        """
+        url = 'https://api.github.com/users/google/repos'
+        payload = [{"name": "repo", "license": {"key": "my_license"}}]
+
+        mock_public_repos_url.return_value = url
+        mock_get_json.return_value = payload
+
+        gh = GithubOrgClient(org_name)
+        self.assertEqual(gh.public_repos(license), expected)
