@@ -37,7 +37,7 @@ class TestGithubOrgClient(TestCase):
         self.assertEqual(gh._public_repos_url, repos_url["repos_url"])
 
     @parameterized.expand([
-        ('google', 'my_license', ['repo']),
+        ('google', 'my_license', ['repo', 'old_repo']),
     ])
     @patch('client.get_json')
     @patch.object(GithubOrgClient, '_public_repos_url')
@@ -49,7 +49,11 @@ class TestGithubOrgClient(TestCase):
         """Tests GithubOrgClient.public_repos method returns correct value
         """
         url = 'https://api.github.com/users/google/repos'
-        payload = [{"name": "repo", "license": {"key": "my_license"}}]
+        payload = [
+            {"name": "repo", "license": {"key": "my_license"}},
+            {"name": "pub_repo", "license": {"key": "pub_license"}},
+            {"name": "old_repo", "license": {"key": "my_license"}}
+            ]
 
         mock_public_repos_url.return_value = url
         mock_get_json.return_value = payload
