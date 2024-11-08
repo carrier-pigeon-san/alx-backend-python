@@ -56,3 +56,4 @@ class TestGithubOrgClient(TestCase):
 
         gh = GithubOrgClient(org_name)
         self.assertEqual(gh.public_repos(license), expected)
+        mock_get_json.assert_called_once()
